@@ -1,0 +1,5 @@
+# Datum.yml
+ResolutionPrecedence:
+  - 'AllNodes\$($Node.Nodename)'
+  - 'Locations\$($Node.Location)'
+  - 'Roles\$($Node.Role)'

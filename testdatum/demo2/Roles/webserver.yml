@@ -1,0 +1,4 @@
+Firewall:
+  Rules:
+    webtraffic: 80
+    secure: 443
