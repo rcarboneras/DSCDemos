@@ -3,7 +3,7 @@
     param
     (
         [string]$server,
-        $serviceURL = "http://PULL.contoso.com:8080/PSDSCPullServer.svc"
+        $serviceURL = "https://PULL.contoso.com:8080/PSDSCPullServer.svc"
     )
 
     $AgentId = (Get-DscLocalConfigurationManager -CimSession $server).AgentId
@@ -16,4 +16,14 @@
     return $object.value
 }
 
-GetReport -server ms1
+$reports = GetReport -server ms1
+
+#Report By StartTime
+$reportsByStartTime = $reports | Sort-Object {$_."StartTime" -as [DateTime] } -Descending
+$reportMostRecent = $reportsByStartTime[0]
+
+#Parse the status Data
+$statusData = $reportMostRecent.StatusData | ConvertFrom-Json
+$statusData.ResourcesInDesiredState
+$statusData.ResourcesNotInDesiredState
+

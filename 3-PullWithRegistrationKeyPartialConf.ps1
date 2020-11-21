@@ -75,7 +75,6 @@ Sample_xDscWebServiceRegistration -NodeName "pull" -RegistrationKey $Registratio
 Start-DscConfiguration -Path .\Sample_xDscWebServiceRegistration -Wait -Verbose -Force
 #endregion
 
-
 #region Creating and uploading MOF Files
 
 Configuration ClientConfig
@@ -149,7 +148,6 @@ New-DscChecksum -Path $destination -Verbose -Force
 
 #endregion
 
-
 #region Configuring target servers
 [DSCLocalConfigurationManager()]
 Configuration Sample_MetaConfigurationToRegisterWithSecurePullServer
@@ -190,12 +188,14 @@ Configuration Sample_MetaConfigurationToRegisterWithSecurePullServer
         {
             Description = 'Client Configuration.'
             ConfigurationSource = @("[ConfigurationRepositoryWeb]CONTOSO-PullSrv")
+            RefreshMode = 'Pull'
         }
 
         PartialConfiguration SecureServer
         {
             Description = 'Set PowerShell execution policy'
             ConfigurationSource = @("[ConfigurationRepositoryWeb]CONTOSO-PullSrv")
+            RefreshMode = 'Pull'
         }
 
         ReportServerWeb CONTOSO-PullSrv
@@ -203,6 +203,11 @@ Configuration Sample_MetaConfigurationToRegisterWithSecurePullServer
             ServerURL       = "https://$ServerName`:8080/PSDSCPullServer.svc"
             RegistrationKey = $RegistrationKey
         }
+#        ReportServerWeb AzureAutomationStateConfiguration
+#         {
+#             ServerUrl       = $RegistrationUrl #AutomationAccount URL
+#             RegistrationKey = $RegistrationKey #Primary Access Key
+#         }
     }
 }
 
